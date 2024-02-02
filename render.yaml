@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: app
+    start_command: gunicorn -b :$PORT app:app
+    env:
+      - key: CHROMEDRIVER_PATH
+        value: "./chromedriver.exe"  # Caminho relativo para o seu ChromeDriver
