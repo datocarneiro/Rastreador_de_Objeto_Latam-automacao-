@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Dato\Documents\REPOSITÓRIO\Rastreador_de_Objeto_Latam\Rast_Latam_Replit_(backup com tabela ok)\venv
+set VIRTUAL_ENV=C:\Users\Dato\Documents\REPOSITÓRIO\Rastreador_de_Objeto_Latam\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
