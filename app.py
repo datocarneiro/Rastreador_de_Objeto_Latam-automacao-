@@ -21,7 +21,7 @@ app.secret_key = 'dato123'  # Defina uma chave secreta adequada
 options = Options()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-options.headless = False  # Executar o Chrome de forma oculta
+options.headless = True  # Executar o Chrome de forma oculta
 
 driver = webdriver.Chrome(options=options)
 
