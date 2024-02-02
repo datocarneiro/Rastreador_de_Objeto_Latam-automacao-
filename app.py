@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = 'dato123'  # Defina uma chave secreta adequada
 
 ##########################################################################
-'''
+
 # para rodar no replit usar essas configuraçõa
 options = Options()
 options.add_argument("--no-sandbox")
@@ -24,17 +24,17 @@ options.add_argument("--disable-dev-shm-usage")
 options.headless = False  # Executar o Chrome de forma oculta
 
 driver = webdriver.Chrome(options=options)
-'''
+
 #############################################################################
 
-# para rodar local usar essa configuração aqui
-from webdriver_manager.chrome import ChromeDriverManager
+# # para rodar local usar essa configuração aqui
+# from webdriver_manager.chrome import ChromeDriverManager
 
-servico = Service(ChromeDriverManager().install())
+# servico = Service(ChromeDriverManager().install())
 
-opcoes = Options()
-opcoes.headless = True  # modo off ou não
-driver = webdriver.Chrome(service=servico, options=opcoes)
+# opcoes = Options()
+# opcoes.headless = True  # modo off ou não
+# driver = webdriver.Chrome(service=servico, options=opcoes)
 
 # Variável global para armazenar a lista de pendentes
 lista_pendentes = []
