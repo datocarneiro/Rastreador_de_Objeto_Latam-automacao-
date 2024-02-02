@@ -16,7 +16,8 @@ app = Flask(__name__)
 app.secret_key = 'dato123'  # Defina uma chave secreta adequada
 
 ##########################################################################
-
+from webdriver_manager.chrome import ChromeDriverManager
+servico = Service(ChromeDriverManager().install())
 # para rodar no replit usar essas configuraçõa
 options = Options()
 options.add_argument("--no-sandbox")
@@ -30,8 +31,8 @@ driver = webdriver.Chrome(options=options)
 # # para rodar local usar essa configuração aqui
 # from webdriver_manager.chrome import ChromeDriverManager
 
+# from webdriver_manager.chrome import ChromeDriverManager
 # servico = Service(ChromeDriverManager().install())
-
 # opcoes = Options()
 # opcoes.headless = True  # modo off ou não
 # driver = webdriver.Chrome(service=servico, options=opcoes)
