@@ -90,8 +90,31 @@ def captura_status(franquia, awb):
     driver.get(f"https://www.latamcargo.com/en/trackshipment?docNumber={awb}&docPrefix=957&soType=SO")
     wait = WebDriverWait(driver, 30)
     try:
-        status_evento = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="statusTable"]/tbody/tr[1]/td[1]')))
-        status = status_evento.text
+        def legenda_status():
+            status_evento = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="statusTable"]/tbody/tr[1]/td[1]')))
+            status = status_evento.text
+            if status == 'DLV' or status == 'DDL':
+                return "Entregue"
+            
+            elif status == 'DDR' or status == 'OFD':
+                return "Em rota"
+            
+            elif status == 'DDF':
+                return "Fechada"
+            
+            elif status == 'RCF':
+                return "Entrada"
+            
+            elif status == 'DEP' or status == 'ARR':
+                return "Entregue"
+            
+            else: # DDC
+                return "Entrega Cancelada"
+
+
+            return 
+        status = legenda_status()
+
 
         data_evento = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="statusTable"]/tbody/tr[1]/td[6]')))
         data = data_evento.text
