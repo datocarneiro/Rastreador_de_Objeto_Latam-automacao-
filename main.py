@@ -94,22 +94,22 @@ def captura_status(franquia, awb):
             status_evento = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="statusTable"]/tbody/tr[1]/td[1]')))
             status = status_evento.text
             if status == 'DLV' or status == 'DDL':
-                return "Entregue"
+                return f"{status} - Entregue"
             
             elif status == 'DDR' or status == 'OFD':
-                return "Em rota"
+                return f"{status} - Em rota"
             
             elif status == 'DDF':
-                return "Fechada"
+                return f"{status} - Fechada"
             
             elif status == 'RCF':
-                return "Entrada"
+                return f"{status} - Entrada"
             
-            elif status == 'DEP' or status == 'ARR':
-                return "Entregue"
+            elif status == 'DEP' or status == 'ARR' or status == 'MAN' or status == 'BDK' or status == 'FOH' or status == 'RCS':
+                return f"{status} - Em transferência"
             
             else: # DDC
-                return "Entrega Cancelada"
+                return f"{status} - Entrega Cancelada"
 
 
             return 
