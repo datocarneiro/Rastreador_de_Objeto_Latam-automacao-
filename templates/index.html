@@ -32,7 +32,7 @@
     <div class="pendentes">
         <h3>Pendentes "não entregue":</h3>
         {% if pendentes %}
-            <p>{{ pendentes }}</p>
+            <p>|TOTAL: {{ total_pendentes }}| - {{ pendentes }}</p>
         {% else %}
             <p>Aguardando precessar pendentes...</p>
         {% endif %}
