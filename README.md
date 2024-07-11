@@ -1,6 +1,12 @@
-Documentação do Código
+# Rastreados do objetos LATAM
+O projeto é um script Python que utiliza a biblioteca Selenium e o framework Flask para automatizar a extração de informações de uma página da web. 
+`O objetivo do código é rastrear encomendas da companhia aérea LATAM`.
 
-O código fornecido é um script Python que utiliza a biblioteca Selenium e o framework Flask para automatizar a extração de informações de uma página da web. O objetivo do código é contar a quantidade de ocorrências de determinadas palavras-chave em um website específico.
+## Resumo do prjeto: 
+como podemos ver na imagem abaixo o usuario carregar um arquivo excel, que contem as Tracking que ele precisa rastrear, 
+ao clicar em `rastrear`a aplicação fará todo o resto, capturando todas as informações necessario, e com a opção de exportar os dados em planilha para o usuario 
+
+![image](https://github.com/datocarneiro/Rastreador_de_Objeto_Latam-automacao-/assets/132966071/07f2f9e1-f248-4e93-a0c2-acc367f3ade2)
 
 Aqui está uma documentação detalhada para o código:
 
