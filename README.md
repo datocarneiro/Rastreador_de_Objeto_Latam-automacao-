@@ -4,7 +4,7 @@ O projeto é um script Python que utiliza a biblioteca Selenium e o framework Fl
 
 ## Resumo da aplicação: 
 como podemos ver na imagem abaixo o usuario carregar um arquivo excel, que contem as Tracking que ele precisa rastrear, 
-ao clicar em `rastrear`a aplicação fará todo o resto, capturando todas as informações necessario, e com a opção de exportar os dados em planilha para o usuario 
+ao clicar em `rastrear`a aplicação fará todo o resto, `capturando todas as informações necessarias`, e com a opção de exportar os `dados em planilha para o usuario`.
 
 ![image](https://github.com/datocarneiro/Rastreador_de_Objeto_Latam-automacao-/assets/132966071/07f2f9e1-f248-4e93-a0c2-acc367f3ade2)
 
