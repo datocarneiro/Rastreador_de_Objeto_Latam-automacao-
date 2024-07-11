@@ -2,7 +2,7 @@
 O projeto é um script Python que utiliza a biblioteca Selenium e o framework Flask para automatizar a extração de informações de uma página da web. 
 `O objetivo do código é rastrear encomendas da companhia aérea LATAM`.
 
-## Resumo do prjeto: 
+## Resumo da aplicação: 
 como podemos ver na imagem abaixo o usuario carregar um arquivo excel, que contem as Tracking que ele precisa rastrear, 
 ao clicar em `rastrear`a aplicação fará todo o resto, capturando todas as informações necessario, e com a opção de exportar os dados em planilha para o usuario 
 
