@@ -13,7 +13,7 @@ from selenium.common.exceptions import TimeoutException
 
 # Configuração do aplicativo Flask
 app = Flask(__name__)
-app.secret_key = 'dato123'  # Defina uma chave secreta adequada
+app.secret_key = 'xxxxxxxxxxxxxx'  # Defina uma chave secreta adequada
 
 ##########################################################################
 '''
