@@ -15,7 +15,7 @@ from selenium.common.exceptions import TimeoutException
 
 # Configuração do aplicativo Flask
 app = Flask(__name__)
-app.secret_key = 'dato123'  # Defina uma chave secreta adequada
+app.secret_key = 'xxxxxxxxxxxxx'  # Defina uma chave secreta adequada
 
 # Configuração do Selenium
 from webdriver_manager.chrome import ChromeDriverManager
