@@ -1,5 +1,12 @@
 venv
+/venv
 venv/
+venv-bash
+/venv-bash
+venv-wsl
+/venv-wsl
 env
 env/
 __pycache__
+.env
+/.env
