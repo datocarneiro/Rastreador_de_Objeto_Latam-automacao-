@@ -61,6 +61,10 @@ def exportar_excel():
     
     return send_file(output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', download_name='resultado.xlsx', as_attachment=True)
 
+@app.route('/download_modelo')
+def download_modelo():
+    return send_file('modelo/base_rastreamento.xlsx', as_attachment=True, download_name='base_rastreamento.xlsx')
+
 @app.route('/', methods=['POST'])
 def preparar_dados_planilha():
     global lista_pendentes  

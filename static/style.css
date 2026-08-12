@@ -59,6 +59,22 @@ input[type="submit"] {
     border-radius: 5px;
     box-shadow: 8px 3px 8px rgba(58, 58, 58, 0.6);
 }
+.botao-download {
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    background-color: #2b5797;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(246, 241, 241);
+    border-radius: 5px;
+    box-shadow: 5px 2px 5px rgba(58, 58, 58, 0.6);
+    border: none;
+    cursor: pointer;
+}
+.botao-download:hover {
+    background-color: #1e3f70;
+}
 .img1 {
     display: block;
     margin-left: 2px;
