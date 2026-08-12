@@ -1,6 +1,7 @@
 import io
 import pickle
-from flask import Flask, render_template, request, session, send_file
+import json
+from flask import Flask, render_template, request, session, send_file, Response, stream_with_context
 from openpyxl import load_workbook
 from werkzeug.utils import secure_filename
 import pandas as pd
@@ -26,31 +27,36 @@ options.add_argument("--disable-dev-shm-usage")
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
 
-# Variável global para armazenar a lista de pendentes
+# Variável global para armazenar a lista de pendentes e o resultado final
 lista_pendentes = []
+resultado_final_df = None
 
 @app.route('/')
 def index():
     return render_template('index.html', pendentes=lista_pendentes)
 
+@app.route('/rastreando')
+def rastreando():
+    return render_template('rastreando.html', total_pendentes=len(lista_pendentes))
+
 @app.route('/resultado')
 def resultado():
-    statuses, datas, df = capturar_status_pendentes()
-    table_html = df.to_html(classes='table table-bordered', index=False)
-    session['df'] = pickle.dumps(df)
+    global resultado_final_df
+    if resultado_final_df is not None and not resultado_final_df.empty:
+        table_html = resultado_final_df.to_html(classes='table table-bordered', index=False)
+    else:
+        table_html = "<p style='text-align:center;'>Nenhum dado disponível. Por favor, inicie um rastreamento primeiro.</p>"
     return render_template('resultado.html', table_html=table_html)
 
 @app.route('/exportar_excel')
 def exportar_excel():
-    df_pickle = session.get('df')
-    if not df_pickle:
+    global resultado_final_df
+    if resultado_final_df is None or resultado_final_df.empty:
         return "Nenhum dado disponível para exportação"
-
-    df = pickle.loads(df_pickle)
     
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        df.to_excel(writer, index=False, sheet_name='Sheet1')
+        resultado_final_df.to_excel(writer, index=False, sheet_name='Sheet1')
     output.seek(0)
     
     return send_file(output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', download_name='resultado.xlsx', as_attachment=True)
@@ -114,27 +120,36 @@ def captura_status(franquia, awb):
         print("Erro de tempo limite (latam indisponível)")
         return "Erro de tempo limite", "Erro de tempo limite"
 
-def capturar_status_pendentes():
-    dados_rastreamento = []
-    statuses, datas = [], []
-    excel_filename = session.get('excel_filename')
+@app.route('/stream')
+def stream():
+    def generate():
+        global resultado_final_df, lista_pendentes
+        dados_rastreamento = []
+        excel_filename = session.get('excel_filename')
 
-    if excel_filename:
-        planilha = load_workbook(excel_filename)
-        aba_ativa = planilha.active
+        if excel_filename:
+            planilha = load_workbook(excel_filename)
+            aba_ativa = planilha.active
+            total = len(lista_pendentes)
+            current = 0
 
-        for coluna_a, coluna_c, coluna_d in zip(aba_ativa["A"][1:], aba_ativa["C"][1:], aba_ativa["D"][1:]):
-            if coluna_d.value != 'ENTREGUE' and coluna_c.value is not None:
-                franquia = coluna_a.value
-                awb = coluna_c.value
-                status, data = captura_status(franquia, awb)
-                dados_rastreamento.append({'FRANQUIA': franquia, 'AWB': awb, 'STATUS': status, 'DATA_EVENTO': data})
-                statuses.append(status)
-                datas.append(data)
+            for coluna_a, coluna_c, coluna_d in zip(aba_ativa["A"][1:], aba_ativa["C"][1:], aba_ativa["D"][1:]):
+                if coluna_d.value != 'ENTREGUE' and coluna_c.value is not None:
+                    franquia = coluna_a.value
+                    awb = coluna_c.value
+                    status, data = captura_status(franquia, awb)
+                    dados_rastreamento.append({'FRANQUIA': franquia, 'AWB': awb, 'STATUS': status, 'DATA_EVENTO': data})
+                    
+                    current += 1
+                    # Envia o progresso pro front-end
+                    yield f"data: {json.dumps({'current': current, 'total': total, 'awb': awb, 'franquia': franquia})}\n\n"
 
-        df = pd.DataFrame(dados_rastreamento)
-        return statuses, datas, df
-    return [], [], None
+            resultado_final_df = pd.DataFrame(dados_rastreamento)
+            yield f"data: {json.dumps({'done': True})}\n\n"
+        else:
+            yield f"data: {json.dumps({'error': 'Arquivo não encontrado'})}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)

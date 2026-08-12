@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rastreando...</title>
+    <h4 class="marca">dato®</h4>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <style>
+        .progress-container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #f3f3f3;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 30px;
+            width: 0%;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.4s ease;
+        }
+        .status-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .current-item {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Processando Rastreamento</h1>
+    
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar">0%</div>
+    </div>
+    
+    <div id="status-text" class="status-text">Iniciando o rastreamento...</div>
+    <div id="current-item" class="current-item">Por favor, aguarde.</div>
+
+    <script>
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+        const currentItemText = document.getElementById('current-item');
+        
+        // Inicia a escuta de eventos SSE (Server-Sent Events)
+        const source = new EventSource('/stream');
+
+        source.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            if (data.error) {
+                statusText.innerText = "Erro: " + data.error;
+                statusText.style.color = "red";
+                source.close();
+                return;
+            }
+            
+            if (data.done) {
+                progressBar.style.width = '100%';
+                progressBar.innerText = '100%';
+                statusText.innerText = "Processamento concluído! Redirecionando...";
+                source.close();
+                
+                // Aguarda 1 segundo e redireciona para a página de resultados
+                setTimeout(function() {
+                    window.location.href = '/resultado';
+                }, 1000);
+            } else {
+                const percent = Math.round((data.current / data.total) * 100);
+                progressBar.style.width = percent + '%';
+                progressBar.innerText = percent + '%';
+                
+                statusText.innerText = `Processando ${data.current} de ${data.total}`;
+                currentItemText.innerText = `Consultando AWB: ${data.awb} (Franquia: ${data.franquia})`;
+            }
+        };
+
+        source.onerror = function(event) {
+            console.error("Erro no EventSource:", event);
+            statusText.innerText = "Erro na comunicação com o servidor.";
+            statusText.style.color = "red";
+            source.close();
+        };
+    </script>
+</body>
+</html>
